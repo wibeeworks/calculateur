@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estimateur de prix de montage</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      font-weight: 300;
+      padding: 20px;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #121212;
+      background-image: radial-gradient(circle at center, #222e3a 0%, #121212 100%);
+      color: white;
+      overflow: hidden;
+    }
+
+    .main-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .container {
+      background: linear-gradient(to bottom, #15171b, #1d2734);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+      overflow: hidden;
+      margin: 0 auto;
+      transition: background 0.5s ease;
+    }
+
+    .progress-container {
+      height: 4px;
+      background-color: #333;
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background-color: white;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      text-align: left;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      box-sizing: border-box;
+      background-color: #2d2d2d;
+      color: white;
+      border: 1px solid #444;
+      border-radius: 5px;
+    }
+
+    input::placeholder {
+      color: #aaa;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      height: 7px;
+      background: #444;
+      border-radius: 5px;
+      margin-top: 15px;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-weight: 300;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+      border-radius: 5px;
+      border: 1px solid #444;
+      background-color: #2d2d2d;
+      color: #ccc;
+    }
+
+    button.selected {
+      background-color: #fff;
+      color: #000;
+    }
+
+    button:hover:not(.selected) {
+      background-color: #444;
+    }
+
+    .prev-button {
+      background: transparent;
+      color: white;
+      border: 1px solid #ccc;
+    }
+
+    .next-button {
+      background: white;
+      color: black;
+      border: none;
+    }
+
+    .estimate-button {
+      background: #0180ff;
+      color: white;
+      border: none;
+    }
+
+    button:hover {
+      background: #ddd;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      text-align: center;
+    }
+
+    #result.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
+      text-align: center;
+      color: #aaa;
+      position: fixed;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+    }
+
+    footer a {
+      color: #0180ff;
+      text-decoration: none;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .discount-section {
+      display: flex;
+      align-items: center;
+      margin-top: 15px;
+    }
+
+    .discount-input {
+      flex: 1;
+    }
+
+    .no-discount, #noDeadlineBtn {
+      margin-left: 10px;
+      background: #dc3545;
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .nav-buttons button {
+      width: 48%;
+    }
+
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background-color: #f00;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .intro-page, .conclusion-page {
+      text-align: center;
+    }
+
+    .intro-page button, .conclusion-page button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-weight: 300;
+      background: #0180ff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+      border-radius: 5px;
+    }
+
+    .intro-page button:hover, .conclusion-page button:hover {
+      transform: scale(1.05);
+      background: #0066cc;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+
+    table, th, td {
+      border: 1px solid #444;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    tr:hover {
+      background-color: #333;
+      cursor: pointer;
+    }
+
+    .price-display {
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: 20px;
+      height: 30px;
+      overflow: hidden;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: 5px;
+      text-align: left;
+    }
+
+    .question-title {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .question-description {
+      font-size: 14px;
+      color: #aaa;
+      margin-bottom: 10px;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+    }
+
+    .button-group button {
+      flex: 1;
+    }
+
+    .panel-title {
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 24px;
+      font-weight: bold;
+      width: 100%;
+      text-align: center;
+    }
+
+    .youtube-embed {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .buy-me-a-coffee-panel {
+      background-color: #111;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .buy-me-a-coffee-panel img {
+      width: 100px;
+      height: auto;
+      border-radius: 10px;
+      margin-right: 15px;
+    }
+
+    .buy-me-a-coffee-panel .product-info {
+      flex: 1;
+      text-align: left;
+    }
+
+    .buy-me-a-coffee-panel button {
+      background-color: #0180ff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .product-description {
+      font-size: 14px;
+      color: #aaa;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <div class="main-title">Estimateur de prix de montage</div>
+    <div class="container">
+      <div class="progress-container hidden" id="progressContainer">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <div id="intro-page" class="intro-page">
+        <h1>Bienvenue sur l'estimateur de prix de montage YouTube</h1>
+        <p>Cet outil vous aidera à estimer le coût de montage de vos vidéos YouTube en fonction de divers paramètres.</p>
+        <button onclick="startQuestions()">Commencer l'estimation</button>
+      </div>
+
+      <div id="questions" class="hidden">
+        <div class="panel-title">Estimateur de prix de montage</div>
+        <div id="q1">
+          <div class="question-title">Durée des rushs bruts</div>
+          <div class="question-description">Entrez la durée totale de vos rushs bruts en minutes.</div>
+          <label>
+            <input type="number" id="rushDuration" min="2" placeholder="ex: 60" required />
+            <div id="error-q1" class="error-message"></div>
+          </label>
+          <div class="nav-buttons">
+            <button class="prev-button" onclick="goToIntro()">Précédent</button>
+            <button class="next-button" onclick="nextQuestion('q1', 'q2')">Suivant</button>
+          </div>
+        </div>
+
+        <div id="q2" class="hidden">
+          <div class="question-title">Durée finale souhaitée</div>
+          <div class="question-description">Entrez la durée finale souhaitée pour votre vidéo en minutes.</div>
+          <label>
+            <input type="number" id="finalDuration" placeholder="ex: 20" required />
+            <div id="error-q2" class="error-message"></div>
+          </label>
+          <div class="nav-buttons">
+            <button class="prev-button" onclick="prevQuestion('q2', 'q1')">Précédent</button>
+            <button class="next-button" onclick="nextQuestion('q2', 'youtube-embed-1')">Suivant</button>
+          </div>
+        </div>
+
+        <div id="youtube-embed-1" class="youtube-embed hidden">
+          <h3>Apprendre à tarifer vos montages</h3>
+          <p>Découvre la vidéo complète pour en apprendre plus</p>
+          <iframe width="420" height="236" src="https://www.youtube.com/embed/GCym6kT7j1A?si=2evFM7jgS4NmDjR3" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <div class="nav-buttons">
+            <button class="prev-button" onclick="prevQuestion('youtube-embed-1', 'q2')">Précédent</button>
+            <button class="next-button" onclick="nextQuestion('youtube-embed-1', 'q3')">Suivant</button>
+          </div>
+        </div>
+
+        <div id="q3" class="hidden">
+          <div class="question-title">Complexité du montage</div>
+          <div class="question-description">Évaluez la complexité du montage de 1 (simple) à 10 (très complexe).</div>
+          <label>
+            <input type="range" id="complexity" min="1" max="10" value="1" />
+            <span id="complexityValue">1</span>/10
+          </label>
+          <div class="nav-buttons">
+            <button class="prev-button" onclick="prevQuestion('q3', 'youtube-embed-1')">Précédent</button>
+            <button class="next-button" onclick="nextQuestion('q3', 'q4')">Suivant</button>
+          </div>
+        </div>
+
+        <div id="q4" class="hidden">
+          <div class="question-title">Étalonnage</div>
+          <div class="question-description">Souhaitez-vous inclure un étalonnage des couleurs dans votre vidéo ?</div>
+          <div class="button-group">
+            <button onclick="selectOption(this, '0')" class="selected">Non</button>
+            <button onclick="selectOption(this, '0.5')">Partiel</button>
+            <button onclick="selectOption(this, '1')">Complet</button>
+          </div>
+          <input type="hidden" id="colorGrading" value="0" />
+          <div class="nav-buttons">
+            <button class="prev-button" onclick="prevQuestion('q4', 'q3')">Précédent</button>
+            <button class="next-button" onclick="nextQuestion('q4', 'q5')">Suivant</button>
+          </div>
+        </div>
+
+        <div id="q5" class="hidden">
+          <div class="question-title">Nombre de POV</div>
+          <div class="question-description">Combien de points de vue (POV) différents avez-vous dans votre vidéo ?</div>
+          <label>
+            <input type="number" id="povCount" min="1" placeholder="ex: 3" required />
+            <div id="error-q5" class="error-message"></div>
+          </label>
+          <div class="nav-buttons">
+            <button class="prev-button" onclick="prevQuestion('q5', 'q4')">Précédent</button>
+            <button class="next-button" onclick="nextQuestion('q5', 'q6')">Suivant</button>
+          </div>
+        </div>
+
+        <div id="q6" class="hidden">
+          <div class="question-title">Qualité vidéo souhaitée</div>
+          <div class="question-description">Sélectionnez la qualité vidéo souhaitée pour votre projet.</div>
+          <div class="button-group">
+            <button onclick="selectOption(this, '1')">720p</button>
+            <button onclick="selectOption(this, '1.1')" class="selected">1080p</button>
+            <button onclick="selectOption(this, '1.2')">1440p</button>
+            <button onclick="selectOption(this, '1.3')">4K</button>
+          </div>
+          <input type="hidden" id="outputQuality" value="1.1" />
+          <div class="nav-buttons">
+            <button class="prev-button" onclick="prevQuestion('q6', 'q5')">Précédent</button>
+            <button class="next-button" onclick="nextQuestion('q6', 'q7')">Suivant</button>
+          </div>
+        </div>
+
+        <div id="q7" class="hidden">
+          <div class="question-title">Qualité des rushs de base</div>
+          <div class="question-description">Indiquez la qualité des rushs de base que vous avez.</div>
+          <div class="button-group">
+            <button onclick="selectOption(this, '0.9')">720p</button>
+            <button onclick="selectOption(this, '1')" class="selected">1080p</button>
+            <button onclick="selectOption(this, '1.1')">1440p</button>
+            <button onclick="selectOption(this, '1.2')">4K</button>
+          </div>
+          <input type="hidden" id="inputQuality" value="1" />
+          <div class="nav-buttons">
+            <button class="prev-button" onclick="prevQuestion('q7', 'q6')">Précédent</button>
+            <button class="next-button" onclick="nextQuestion('q7', 'q8')">Suivant</button>
+          </div>
+        </div>
+
+        <div id="q8" class="hidden">
+          <div class="question-title">Délai pour rendre la vidéo</div>
+          <div class="question-description">Indiquez le délai pour rendre la vidéo en jours.</div>
+          <label>
+            <input type="range" id="deadlineSlider" min="0" max="90" value="0" />
+            <span id="deadlineValue">0</span> jours
+            <button id="noDeadlineBtn" onclick="noDeadline()">Pas de délai</button>
+          </label>
+          <div class="nav-buttons">
+            <button class="prev-button" onclick="prevQuestion('q8', 'q7')">Précédent</button>
+            <button class="next-button" onclick="nextQuestion('q8', 'q9')">Suivant</button>
+          </div>
+        </div>
+
+        <div id="q9" class="hidden">
+          <div class="question-title">Pourcentage de réduction</div>
+          <div class="question-description">Si applicable, entrez le pourcentage de réduction.</div>
+          <label>
+            <div class="discount-section">
+              <input type="number" id="discount" class="discount-input" placeholder="ex: 10" />
+              <button class="no-discount" onclick="noDiscount()">Pas de réduction</button>
+            </div>
+          </label>
+          <div class="nav-buttons">
+            <button class="prev-button" onclick="prevQuestion('q9', 'q8')">Précédent</button>
+            <button class="estimate-button" onclick="calculatePrice()">Estimer mon prix</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="conclusion-page" class="conclusion-page hidden">
+        <div class="panel-title">Résultats</div>
+        <div class="result-description">Voici une estimation détaillée des coûts de montage de votre vidéo.</div>
+        <div id="result"></div>
+        <div class="price-display" id="price-display">0€</div>
+        <div class="buy-me-a-coffee-panel">
+          <img src="https://live.staticflickr.com/65535/54612673251_3cae9ed5af_q.jpg" alt="Mockups Design">
+          <div class="product-info">
+            <h3>PACK : Competition ⚔️</h3>
+            <p class="product-description">Améliorez vos compétences en montage avec ce pack spécialement conçu pour les compétiteurs.</p>
+            <button onclick="window.open('https://www.buymeacoffee.com/wibeeworks/e/423510', '_blank')">Acheter</button>
+          </div>
+        </div>
+        <div class="nav-buttons">
+          <button class="prev-button" onclick="goToQuestion('q9')">Précédent</button>
+          <button onclick="retryEstimation()">Réessayer</button>
+        </div>
+      </div>
+
+      <footer>
+        <p>Créé par <a href="https://youtube.com/@WibeeWorks" target="_blank">@WibeeWorks</a> |
+        <a href="https://instagram.com/wibeeworks/" target="_blank">Instagram</a> |
+        <a href="https://discord.gg/ze2FTsNUS3" target="_blank">Discord</a></p>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    const complexitySlider = document.getElementById('complexity');
+    const complexityValue = document.getElementById('complexityValue');
+    complexitySlider.addEventListener('input', () => {
+      complexityValue.textContent = complexitySlider.value;
+    });
+
+    const deadlineSlider = document.getElementById('deadlineSlider');
+    const deadlineValue = document.getElementById('deadlineValue');
+    deadlineSlider.addEventListener('input', () => {
+      deadlineValue.textContent = deadlineSlider.value;
+    });
+
+    const progressBar = document.getElementById('progressBar');
+    const totalQuestions = 10;
+    let currentQuestion = 0;
+
+    function updateProgressBar() {
+      currentQuestion++;
+      const progress = (currentQuestion / totalQuestions) * 100;
+      progressBar.style.width = progress + '%';
+    }
+
+    function startQuestions() {
+      document.getElementById('intro-page').classList.add('hidden');
+      document.getElementById('questions').classList.remove('hidden');
+      document.getElementById('q1').classList.remove('hidden');
+      document.getElementById('progressContainer').classList.remove('hidden');
+      updateProgressBar();
+    }
+
+    function nextQuestion(current, next) {
+      if (!validateQuestion(current)) return;
+      if (current === 'youtube-embed-1') {
+        document.getElementById('progressContainer').classList.add('hidden');
+        document.querySelector('.container').style.background = 'linear-gradient(to bottom, #15171b, #221826)';
+      } else {
+        document.getElementById('progressContainer').classList.remove('hidden');
+        document.querySelector('.container').style.background = 'linear-gradient(to bottom, #15171b, #1d2734)';
+      }
+      slideOut(current, next);
+      updateProgressBar();
+    }
+
+    function prevQuestion(current, prev) {
+      slideOut(current, prev, true);
+      currentQuestion--;
+      const progress = ((currentQuestion - 1) / totalQuestions) * 100;
+      progressBar.style.width = progress + '%';
+    }
+
+    function slideOut(current, next, reverse = false) {
+      const currentElement = document.getElementById(current);
+      const nextElement = document.getElementById(next);
+
+      currentElement.style.transition = 'transform 0.5s ease';
+      nextElement.style.transition = 'transform 0.5s ease';
+
+      if (reverse) {
+        currentElement.style.transform = 'translateX(100%)';
+        nextElement.style.transform = 'translateX(-100%)';
+      } else {
+        currentElement.style.transform = 'translateX(-100%)';
+        nextElement.style.transform = 'translateX(100%)';
+      }
+
+      setTimeout(() => {
+        currentElement.classList.add('hidden');
+        nextElement.classList.remove('hidden');
+        setTimeout(() => {
+          currentElement.style.transform = '';
+          nextElement.style.transform = 'translateX(0)';
+        }, 10);
+      }, 10);
+    }
+
+    function validateQuestion(current) {
+      let isValid = true;
+      if (current === 'q1') {
+        const rushDuration = parseFloat(document.getElementById('rushDuration').value || 0);
+        const errorElement = document.getElementById('error-q1');
+        if (isNaN(rushDuration) || rushDuration <= 1) {
+          errorElement.textContent = 'La durée des rushs de base doit être supérieure à 1 minute.';
+          isValid = false;
+        } else {
+          errorElement.textContent = '';
+        }
+      } else if (current === 'q2') {
+        const finalDuration = parseFloat(document.getElementById('finalDuration').value || 0);
+        const errorElement = document.getElementById('error-q2');
+        if (isNaN(finalDuration) || finalDuration <= 0) {
+          errorElement.textContent = 'Veuillez entrer une durée finale souhaitée supérieure à 0.';
+          isValid = false;
+        } else {
+          errorElement.textContent = '';
+        }
+      } else if (current === 'q5') {
+        const povCount = parseFloat(document.getElementById('povCount').value || 0);
+        const errorElement = document.getElementById('error-q5');
+        if (isNaN(povCount) || povCount < 1) {
+          errorElement.textContent = 'Veuillez entrer un nombre de POV valide.';
+          isValid = false;
+        } else {
+          errorElement.textContent = '';
+        }
+      }
+      return isValid;
+    }
+
+    function selectOption(button, value) {
+      const buttons = button.parentElement.querySelectorAll('button');
+      buttons.forEach(btn => btn.classList.remove('selected'));
+      button.classList.add('selected');
+      document.getElementById(button.parentElement.parentElement.querySelector('input[type="hidden"]').id).value = value;
+    }
+
+    function noDiscount() {
+      document.getElementById('discount').value = '0';
+    }
+
+    function noDeadline() {
+      document.getElementById('deadlineSlider').value = '0';
+      document.getElementById('deadlineValue').textContent = '0';
+    }
+
+    function calculatePrice() {
+      const rushDuration = parseFloat(document.getElementById('rushDuration').value || 0);
+      const finalDuration = parseFloat(document.getElementById('finalDuration').value || 0);
+      const complexity = parseFloat(document.getElementById('complexity').value);
+      const grading = parseFloat(document.getElementById('colorGrading').value);
+      const povCount = parseFloat(document.getElementById('povCount').value || 1);
+      const outQ = parseFloat(document.getElementById('outputQuality').value);
+      const inQ = parseFloat(document.getElementById('inputQuality').value);
+      const deadline = parseFloat(document.getElementById('deadlineSlider').value);
+      const discount = parseFloat(document.getElementById('discount').value || 0);
+
+      let rushPrice = (rushDuration - finalDuration) * 0.5;
+      let complexityCost = finalDuration * complexity;
+      let gradingCost = grading * finalDuration * 0.5 * povCount;
+      let povCost = (povCount - 1) * rushDuration;
+      let qualityCost = (outQ * finalDuration) / 4000;
+      let inputQualityCost = (inQ * rushDuration) / 18000;
+
+      let deadlineMultiplier = 1;
+      const baseDays = 7;
+      if (deadline < baseDays) {
+        const complexityFactor = complexity / 10;
+        const deadlineFactor = baseDays / deadline;
+        deadlineMultiplier = Math.max(1, complexityFactor * deadlineFactor);
+      }
+
+      let price = rushPrice + complexityCost + gradingCost + povCost + qualityCost + inputQualityCost;
+      price *= deadlineMultiplier;
+
+      const discountAmount = price * (discount / 100);
+      price -= discountAmount;
+
+      const resultBox = document.getElementById('result');
+      let resultHTML = `
+        <table>
+          <tr>
+            <th>Élément</th>
+            <th>Coût</th>
+          </tr>
+          <tr>
+            <td>Prix du dérush</td>
+            <td>${Math.round(rushPrice)}€</td>
+          </tr>
+          <tr>
+            <td>Complexité</td>
+            <td>${Math.round(complexityCost)}€</td>
+          </tr>
+          <tr>
+            <td>Étalonnage</td>
+            <td>${Math.round(gradingCost)}€</td>
+          </tr>
+          <tr>
+            <td>Coût des POV</td>
+            <td>${Math.round(povCost)}€</td>
+          </tr>
+          <tr>
+            <td>Qualité vidéo souhaitée</td>
+            <td>${Math.round(qualityCost)}€</td>
+          </tr>
+          <tr>
+            <td>Qualité des rushs de base</td>
+            <td>${Math.round(inputQualityCost)}€</td>
+          </tr>
+          <tr>
+            <td>Coût du délai</td>
+            <td>${Math.round(deadlineMultiplier * 100)}%</td>
+          </tr>
+      `;
+      if (discount > 0) {
+        resultHTML += `
+          <tr>
+            <td>Réduction</td>
+            <td>-${Math.round(discountAmount)}€</td>
+          </tr>
+        `;
+      }
+      resultHTML += `</table><p>Prix estimé :</p>`;
+      resultBox.innerHTML = resultHTML;
+      resultBox.classList.add("visible");
+
+      animatePrice(Math.round(price));
+
+      document.getElementById('questions').classList.add('hidden');
+      document.getElementById('conclusion-page').classList.remove('hidden');
+      document.getElementById('progressContainer').classList.add('hidden');
+    }
+
+    function animatePrice(finalPrice) {
+      const priceDisplay = document.getElementById('price-display');
+      let currentPrice = 0;
+      const increment = finalPrice / 50;
+      const timer = setInterval(() => {
+        currentPrice += increment;
+        if (currentPrice >= finalPrice) {
+          currentPrice = finalPrice;
+          clearInterval(timer);
+        }
+        priceDisplay.textContent = `${Math.round(currentPrice)}€`;
+      }, 20);
+    }
+
+    function goToQuestion(questionId) {
+      document.getElementById('conclusion-page').classList.add('hidden');
+      document.getElementById('questions').classList.remove('hidden');
+      document.querySelectorAll('#questions > div').forEach(div => {
+        div.classList.add('hidden');
+      });
+      document.getElementById(questionId).classList.remove('hidden');
+    }
+
+    function goToIntro() {
+      document.getElementById('questions').classList.add('hidden');
+      document.getElementById('intro-page').classList.remove('hidden');
+      document.getElementById('progressContainer').classList.add('hidden');
+      currentQuestion = 0;
+      progressBar.style.width = '0%';
+    }
+
+    function retryEstimation() {
+      window.location.reload();
+    }
+  </script>
+</body>
+</html>
