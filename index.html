@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Estimateur de prix de montage</title>
+  <title></title>
   <link rel="icon" href="https://live.staticflickr.com/65535/54613370848_5928b6ae5a.jpg" type="image/jpeg">
   <style>
     :root {
@@ -66,7 +66,7 @@
     }
     label {
       display: block;
-      margin-top: 15px;
+      margin-top: 25px;
       text-align: left;
     }
     input, select {
@@ -225,9 +225,20 @@
       padding: 10px;
       text-align: left;
     }
+    tr {
+      position: relative;
+    }
     tr:hover {
       background-color: #333;
       cursor: pointer;
+    }
+    .edit-icon {
+      position: absolute;
+      right: 10px;
+      display: none;
+    }
+    tr:hover .edit-icon {
+      display: inline;
     }
     .price-display {
       font-size: 28px;
@@ -278,16 +289,15 @@
       justify-content: space-between;
       background-color: #0f151d;
       padding: 15px;
-      border-radius: 5px;
+      border-radius: 10px;
       margin-top: 20px;
-      height: auto;
-      min-height: 80px;
+      height: 60px; /* Réduction de la hauteur */
     }
     .buy-me-a-coffee-panel img {
-      width: 60px;
-      height: 60px;
+      width: 50px; /* Réduction de la taille de l'image */
+      height: 50px;
       border-radius: 10px;
-      margin-top: 10px;
+      margin-top: 0; /* Suppression de la marge supérieure */
     }
     .buy-me-a-coffee-panel .product-info {
       flex: 1;
@@ -301,16 +311,13 @@
       padding: 8px 15px;
       border-radius: 5px;
       cursor: pointer;
-      margin-top: 10px;
-      margin-right: 10px;
+      margin-top: 0; /* Suppression de la marge supérieure */
+      margin-right: 0; /* Suppression de la marge droite */
     }
     .product-description {
       font-size: 12px;
       color: #aaa;
-      margin-top: 5px;
-    }
-    .edit-icon {
-      margin-left: 10px;
+      margin-top: 0px;
     }
     @media (max-width: 600px) {
       body {
@@ -378,7 +385,7 @@
 </head>
 <body>
   <div>
-    <div class="main-title hidden">Estimateur de prix de montage</div>
+    <div class="main-title hidden"></div>
     <div class="container">
       <div class="progress-container hidden" id="progressContainer">
         <div class="progress-bar" id="progressBar"></div>
@@ -523,10 +530,10 @@
         <div class="buy-me-a-coffee-panel">
           <img src="https://live.staticflickr.com/65535/54613370848_5928b6ae5a.jpg" alt="Mockups Design">
           <div class="product-info">
-            <h3 style="margin-top: 10px;">Fais partie de la communauté</h3>
-            <p class="product-description" style="margin-top: 0;">Fais partie de la communauté pour des clients, de l’entraide, des ressources et bien plus.</p>
+            <h3 style="margin-top: 25px;">Fais partie de la communauté</h3>
+            <p class="product-description" style="margin-top: -10;">Fais partie de la communauté pour des clients, de l’entraide, des ressources et bien plus.</p>
           </div>
-          <button onclick="window.open('https://discord.gg/ze2FTsNUS3', '_blank')">Rejoindre</button>
+          <button onclick="window.open('https://urlr.me/5KFAsu', '_blank')">Rejoindre</button>
         </div>
         <div class="nav-buttons">
           <button class="prev-button" onclick="goToQuestion('q9')">Précédent</button>
@@ -537,7 +544,7 @@
         <p>Créé par <a href="https://youtube.com/@WibeeWorks" target="_blank">@WibeeWorks</a> |
         <a href="https://instagram.com/wibeeworks/" target="_blank">Instagram</a> |
         <a href="mailto:wibeecontact@gmail.com">Contact</a> |
-        <a href="https://discord.gg/ze2FTsNUS3" target="_blank">Discord</a></p>
+        <a href="https://urlr.me/5KFAsu" target="_blank">Discord</a></p>
       </footer>
     </div>
   </div>
@@ -671,34 +678,28 @@
       let resultHTML = `
         <table>
           <tr onclick="goToQuestion('q1')">
-            <td>Prix du dérush</td>
+            <td>Prix du dérush<span class="edit-icon">✏️</span></td>
             <td>${Math.round(rushPrice)}€</td>
-            <td class="edit-icon">✏️</td>
           </tr>
           <tr onclick="goToQuestion('q7')">
-            <td>Complexité générale</td>
+            <td>Complexité générale<span class="edit-icon">✏️</span></td>
             <td>${Math.round(complexityCost + gradingCost + povCost)}€</td>
-            <td class="edit-icon">✏️</td>
           </tr>
           <tr onclick="goToQuestion('q4')">
-            <td>Qualité vidéo souhaitée</td>
+            <td>Qualité vidéo souhaitée<span class="edit-icon">✏️</span></td>
             <td>${Math.round(qualityCost)}€</td>
-            <td class="edit-icon">✏️</td>
           </tr>
           <tr onclick="goToQuestion('q3')">
-            <td>Qualité des rushs de base</td>
+            <td>Qualité des rushs de base<span class="edit-icon">✏️</span></td>
             <td>${Math.round(inputQualityCost)}€</td>
-            <td class="edit-icon">✏️</td>
           </tr>
           <tr onclick="goToQuestion('q8')">
-            <td>Coût du délai</td>
+            <td>Coût du délai<span class="edit-icon">✏️</span></td>
             <td>${Math.round(deadlineCost)}€</td>
-            <td class="edit-icon">✏️</td>
           </tr>
           <tr onclick="goToQuestion('q9')">
-            <td>Frais d'expérience</td>
+            <td>Frais d'expérience<span class="edit-icon">✏️</span></td>
             <td>${Math.round((experienceFee - 1) * 100)}%</td>
-            <td class="edit-icon">✏️</td>
           </tr>
         </table>
         <p>Prix estimé :</p>
