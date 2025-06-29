@@ -33,6 +33,7 @@
       background-image: radial-gradient(circle at center, #222e3a 0%, #121212 100%);
       color: var(--text-color);
       overflow: hidden;
+      position: relative;
     }
     .main-title {
       font-size: 24px;
@@ -389,12 +390,68 @@
         opacity: 0;
       }
     }
+    .translate-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #444;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .burger-menu {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      color: #ccc;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+    .menu {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 250px;
+      height: 100%;
+      background-color: #1a1a1a;
+      color: white;
+      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+      transition: right 0.3s ease;
+      z-index: 1000;
+      padding-top: 50px;
+    }
+    .menu.open {
+      right: 0;
+    }
+    .menu a {
+      color: #ccc;
+      text-decoration: none;
+      display: block;
+      padding: 10px 20px;
+      transition: background-color 0.2s ease;
+    }
+    .menu a:hover {
+      background-color: #333;
+    }
   </style>
 </head>
 <body>
+  <button class="burger-menu" id="burgerMenu">☰</button>
+  <div class="menu" id="menu">
+    <a href="https://www.youtube.com/@wibeeworks" target="_blank">Tutoriels</a>
+    <a href="https://shop.wibeeworks.com" target="_blank">Shop</a>
+    <a href="https://patreon.com/wibeeworks" target="_blank">Abonnement</a>
+    <a href="https://urlr.me/5KFAsu" target="_blank">Communauté</a>
+  </div>
   <div>
     <div class="main-title hidden"></div>
     <div class="container">
+      <button class="translate-button" onclick="toggleLanguage()">FR</button>
       <div class="progress-container hidden" id="progressContainer">
         <div class="progress-bar" id="progressBar"></div>
       </div>
@@ -550,7 +607,7 @@
       </div>
       <footer>
         <p>Créé par <a href="https://youtube.com/@WibeeWorks" target="_blank">@WibeeWorks</a> |
-        <a href="https://bmc.link/wibeeworks" target="_blank">Boutique</a> |
+        <a href="https://shop.wibeeworks.com" target="_blank">Boutique</a> |
         <a href="mailto:wibeecontact@gmail.com">Contact</a> |
         <a href="https://urlr.me/5KFAsu" target="_blank">Discord</a></p>
       </footer>
@@ -570,11 +627,13 @@
     const progressBar = document.getElementById('progressBar');
     const totalQuestions = 9;
     let currentQuestion = 0;
+
     function updateProgressBar() {
       currentQuestion++;
       const progress = (currentQuestion / totalQuestions) * 100;
       progressBar.style.width = progress + '%';
     }
+
     function startQuestions() {
       document.getElementById('intro-page').classList.add('hidden');
       document.getElementById('questions').classList.remove('hidden');
@@ -582,17 +641,20 @@
       document.getElementById('progressContainer').classList.remove('hidden');
       updateProgressBar();
     }
+
     function nextQuestion(current, next) {
       if (!validateQuestion(current)) return;
       slideOut(current, next);
       updateProgressBar();
     }
+
     function prevQuestion(current, prev) {
       slideOut(current, prev, true);
       currentQuestion--;
       const progress = ((currentQuestion - 1) / totalQuestions) * 100;
       progressBar.style.width = progress + '%';
     }
+
     function slideOut(current, next, reverse = false) {
       const currentElement = document.getElementById(current);
       const nextElement = document.getElementById(next);
@@ -614,6 +676,7 @@
         }, 10);
       }, 10);
     }
+
     function validateQuestion(current) {
       let isValid = true;
       if (current === 'q1') {
@@ -650,16 +713,19 @@
       }
       return isValid;
     }
+
     function selectOption(button, value) {
       const buttons = button.parentElement.querySelectorAll('button');
       buttons.forEach(btn => btn.classList.remove('selected'));
       button.classList.add('selected');
       document.getElementById(button.parentElement.parentElement.querySelector('input[type="hidden"]').id).value = value;
     }
+
     function noDeadline() {
       document.getElementById('deadlineSlider').value = '0';
       document.getElementById('deadlineValue').textContent = '0';
     }
+
     function calculatePrice() {
       const rushDuration = parseFloat(document.getElementById('rushDuration').value || 0);
       const finalDuration = parseFloat(document.getElementById('finalDuration').value || 0);
@@ -720,6 +786,7 @@
       document.getElementById('progressContainer').classList.add('hidden');
       createConfetti();
     }
+
     function animatePrice(finalPrice) {
       const priceDisplay = document.getElementById('price-display');
       let currentPrice = 0;
@@ -733,6 +800,7 @@
         priceDisplay.textContent = `${Math.round(currentPrice)}€`;
       }, 20);
     }
+
     function createConfetti() {
       const confettiContainer = document.createElement('div');
       confettiContainer.id = 'confetti-container';
@@ -753,6 +821,7 @@
         confettiContainer.appendChild(confetti);
       }
     }
+
     function goToQuestion(questionId) {
       document.getElementById('conclusion-page').classList.add('hidden');
       document.getElementById('questions').classList.remove('hidden');
@@ -761,6 +830,7 @@
       });
       document.getElementById(questionId).classList.remove('hidden');
     }
+
     function goToIntro() {
       document.getElementById('questions').classList.add('hidden');
       document.getElementById('intro-page').classList.remove('hidden');
@@ -768,9 +838,72 @@
       currentQuestion = 0;
       progressBar.style.width = '0%';
     }
+
     function retryEstimation() {
       window.location.reload();
     }
+
+    function toggleLanguage() {
+      const translateButton = document.querySelector('.translate-button');
+      if (translateButton.textContent === 'FR') {
+        translateButton.textContent = 'EN';
+        translateToEnglish();
+      } else {
+        translateButton.textContent = 'FR';
+        translateToFrench();
+      }
+    }
+
+    function translateToEnglish() {
+      document.querySelector('#intro-page h1').textContent = 'Welcome to the YouTube Video Editing Price Estimator';
+      document.querySelector('#intro-page p').textContent = 'This tool will help you estimate the cost of editing your YouTube videos based on various parameters.';
+      document.querySelector('#intro-page button').textContent = 'Start Estimation';
+      document.querySelector('#q1 .question-title').textContent = 'Raw Footage Duration';
+      document.querySelector('#q1 .question-description').textContent = 'Enter the total duration of your raw footage in minutes.';
+      document.querySelector('#q1 input').placeholder = 'e.g., 60';
+      document.querySelector('#q2 .question-title').textContent = 'Desired Final Duration';
+      document.querySelector('#q2 .question-description').textContent = 'Enter the desired final duration for your video in minutes.';
+      document.querySelector('#q2 input').placeholder = 'e.g., 20';
+      document.querySelector('#q3 .question-title').textContent = 'Base Footage Quality';
+      document.querySelector('#q3 .question-description').textContent = 'Indicate the quality of the base footage you have.';
+      document.querySelector('#q4 .question-title').textContent = 'Desired Video Quality';
+      document.querySelector('#q4 .question-description').textContent = 'Select the desired video quality for your project.';
+      document.querySelector('#q5 .question-title').textContent = 'Number of POVs';
+      document.querySelector('#q5 .question-description').textContent = 'How many different points of view (POVs) do you have in your video?';
+      document.querySelector('#q5 input').placeholder = 'e.g., 3';
+      document.querySelector('#q6 .question-title').textContent = 'Color Grading';
+      document.querySelector('#q6 .question-description').textContent = 'Do you want to include color grading in your video?';
+      document.querySelector('#q7 .question-title').textContent = 'Editing Complexity';
+      document.querySelector('#q7 .question-description').textContent = 'Rate the editing complexity from 1 (simple) to 10 (very complex).';
+      document.querySelector('#q8 .question-title').textContent = 'Deadline for Video Delivery';
+      document.querySelector('#q8 .question-description').textContent = 'Indicate the deadline for delivering the video in days.';
+      document.querySelector('#q9 .question-title').textContent = 'Experience Fees';
+      document.querySelector('#q9 .question-description').textContent = 'Select the level of experience of the editor.';
+      document.querySelector('.estimate-button').textContent = 'Estimate My Price';
+      document.querySelector('#conclusion-page .panel-title').textContent = 'Results';
+      document.querySelector('#conclusion-page .result-description').textContent = 'Here is a detailed estimate of the costs for editing your video.';
+      document.querySelector('.buy-me-a-coffee-panel h3').textContent = 'Join the Community';
+      document.querySelector('.buy-me-a-coffee-panel p').textContent = 'Join the community for clients, mutual aid, resources, and more.';
+      document.querySelector('.buy-me-a-coffee-panel button').textContent = 'Join';
+      document.querySelector('#conclusion-page .nav-buttons button:last-child').textContent = 'Retry';
+    }
+
+    function translateToFrench() {
+      window.location.reload();
+    }
+
+    document.getElementById('burgerMenu').addEventListener('click', function() {
+      const menu = document.getElementById('menu');
+      menu.classList.toggle('open');
+    });
+
+    document.addEventListener('click', function(event) {
+      const menu = document.getElementById('menu');
+      const burgerMenu = document.getElementById('burgerMenu');
+      if (event.target !== burgerMenu && !menu.contains(event.target)) {
+        menu.classList.remove('open');
+      }
+    });
   </script>
 </body>
 </html>
