@@ -1,3 +1,8 @@
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -15,9 +20,9 @@
   </script>
   <style>
     :root {
-      --primary-color: #0077ff;
-      --secondary-color: #00aaff;
-      --background-color: #121212;
+      --primary-color: #9900CC;
+      --secondary-color: #9900CC;
+      --background-color: #32233c;
       --text-color: white;
     }
     body {
@@ -30,7 +35,7 @@
       align-items: center;
       min-height: 100vh;
       background-color: var(--background-color);
-      background-image: radial-gradient(circle at center, #222e3a 0%, #121212 100%);
+      background-image: radial-gradient(circle at center, #32233c 0%, #121212 100%);
       color: var(--text-color);
       overflow: hidden;
       position: relative;
@@ -108,7 +113,7 @@
     }
     button {
       margin-top: 10px;
-      padding: 10px 20px;
+      padding: 8px 20px;
       font-weight: 300;
       cursor: pointer;
       transition: background 0.2s ease, color 0.2s ease;
@@ -135,7 +140,7 @@
       border: none;
     }
     .estimate-button {
-      background: #0180ff;
+      background: #9900CC;
       color: white;
       border: none;
     }
@@ -165,7 +170,7 @@
       right: 0;
     }
     footer a {
-      color: #0180ff;
+      color: #9900CC;
       text-decoration: none;
     }
     .hidden {
@@ -211,7 +216,7 @@
       margin-top: 20px;
       padding: 10px 20px;
       font-weight: 300;
-      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      background: #9900CC;
       color: white;
       border: none;
       cursor: pointer;
@@ -220,7 +225,7 @@
     }
     .intro-page button:hover, .conclusion-page button:hover {
       transform: scale(1.05);
-      background: #0066cc;
+      background: #7a00a8;
     }
     table {
       width: 100%;
@@ -314,7 +319,7 @@
       margin: 0 10px;
     }
     .buy-me-a-coffee-panel button {
-      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      background: #9900CC;
       color: white;
       border: none;
       padding: 8px 15px;
@@ -327,6 +332,44 @@
       font-size: 12px;
       color: #aaa;
       margin-top: 0px;
+    }
+    .complexity-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    .complexity-button {
+      flex: 1 1 calc(25% - 10px);
+      margin: 0 5px;
+      padding: 5px 5px 5px 5px;
+      border: 1px solid #444;
+      border-radius: 5px;
+      background-color: #2d2d2d;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      min-width: 100px;
+      max-width: 100px;
+      height: 150px;
+      box-sizing: border-box;
+    }
+    .complexity-button.selected {
+      background-color: #444;
+    }
+    .complexity-button h3 {
+      margin-top: 5px;
+      margin-bottom: 5px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: normal;
+    }
+    .complexity-button img {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 5px;
     }
     @media (max-width: 600px) {
       body {
@@ -379,6 +422,17 @@
         display: block;
         margin: 10px auto 0;
       }
+      .complexity-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+      .complexity-button {
+        flex: 1 1 calc(50% - 10px);
+        margin-bottom: 10px;
+        height: auto;
+        min-width: calc(50% - 10px);
+      }
     }
     @keyframes fall {
       0% {
@@ -389,17 +443,6 @@
         transform: translateY(100vh) rotate(360deg);
         opacity: 0;
       }
-    }
-    .translate-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: #444;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
-      cursor: pointer;
     }
     .burger-menu {
       position: fixed;
@@ -438,6 +481,18 @@
     .menu a:hover {
       background-color: #333;
     }
+    .product-info h3 {
+      margin-bottom: 5px;
+    }
+    .conclusion-page .buy-me-a-coffee-panel {
+      margin-top: 10px;
+    }
+    .conclusion-page .product-info h3 {
+      margin-top: 10px;
+    }
+    .conclusion-page .product-description {
+      margin-top: 5px;
+    }
   </style>
 </head>
 <body>
@@ -447,11 +502,11 @@
     <a href="https://shop.wibeeworks.com" target="_blank">Shop</a>
     <a href="https://patreon.com/wibeeworks" target="_blank">Abonnement</a>
     <a href="https://urlr.me/5KFAsu" target="_blank">Communauté</a>
+    <a href="https://subscribepage.io/EkcjLy" target="_blank">Newsletter</a>
   </div>
   <div>
     <div class="main-title hidden"></div>
     <div class="container">
-      <button class="translate-button" onclick="toggleLanguage()">FR</button>
       <div class="progress-container hidden" id="progressContainer">
         <div class="progress-bar" id="progressBar"></div>
       </div>
@@ -469,7 +524,7 @@
           <div class="question-title">Durée des rushs bruts</div>
           <div class="question-description">Entrez la durée totale de vos rushs bruts en minutes.</div>
           <label>
-            <input type="number" id="rushDuration" min="2" placeholder="ex: 60" required />
+            <input type="number" id="rushDuration" min="2" max="6000" placeholder="ex: 60" required />
             <div id="error-q1" class="error-message"></div>
           </label>
           <div class="nav-buttons">
@@ -493,12 +548,12 @@
           <div class="question-title">Qualité des rushs de base</div>
           <div class="question-description">Indiquez la qualité des rushs de base que vous avez.</div>
           <div class="button-group">
-            <button onclick="selectOption(this, '0.9')">720p</button>
-            <button onclick="selectOption(this, '1')" class="selected">1080p</button>
-            <button onclick="selectOption(this, '1.1')">1440p</button>
-            <button onclick="selectOption(this, '1.2')">4K</button>
+            <button onclick="selectOption(this, '720p')">720p</button>
+            <button onclick="selectOption(this, '1080p')" class="selected">1080p</button>
+            <button onclick="selectOption(this, '1440p')">1440p</button>
+            <button onclick="selectOption(this, '4K')">4K</button>
           </div>
-          <input type="hidden" id="inputQuality" value="1" />
+          <input type="hidden" id="inputQuality" value="1080p" />
           <div class="nav-buttons">
             <button class="prev-button" onclick="prevQuestion('q3', 'q2')">Précédent</button>
             <button class="next-button" onclick="nextQuestion('q3', 'q4')">Suivant</button>
@@ -508,12 +563,12 @@
           <div class="question-title">Qualité vidéo souhaitée</div>
           <div class="question-description">Sélectionnez la qualité vidéo souhaitée pour votre projet.</div>
           <div class="button-group">
-            <button onclick="selectOption(this, '1')">720p</button>
-            <button onclick="selectOption(this, '1.1')" class="selected">1080p</button>
-            <button onclick="selectOption(this, '1.2')">1440p</button>
-            <button onclick="selectOption(this, '1.3')">4K</button>
+            <button onclick="selectOption(this, '720p')">720p</button>
+            <button onclick="selectOption(this, '1080p')" class="selected">1080p</button>
+            <button onclick="selectOption(this, '1440p')">1440p</button>
+            <button onclick="selectOption(this, '4K')">4K</button>
           </div>
-          <input type="hidden" id="outputQuality" value="1.1" />
+          <input type="hidden" id="outputQuality" value="1080p" />
           <div class="nav-buttons">
             <button class="prev-button" onclick="prevQuestion('q4', 'q3')">Précédent</button>
             <button class="next-button" onclick="nextQuestion('q4', 'q5')">Suivant</button>
@@ -523,7 +578,7 @@
           <div class="question-title">Nombre de POV</div>
           <div class="question-description">Combien de points de vue (POV) différents avez-vous dans votre vidéo ?</div>
           <label>
-            <input type="number" id="povCount" min="1" placeholder="ex: 3" required />
+            <input type="number" id="povCount" min="1" max="150" placeholder="ex: 3" required />
             <div id="error-q5" class="error-message"></div>
           </label>
           <div class="nav-buttons">
@@ -548,10 +603,36 @@
         <div id="q7" class="hidden">
           <div class="question-title">Complexité du montage</div>
           <div class="question-description">Évaluez la complexité du montage de 1 (simple) à 10 (très complexe).</div>
+          <div class="complexity-buttons">
+            <div class="complexity-button" onclick="selectComplexity(this, 2)">
+              <h3>Simple</h3>
+              <img src="https://i.postimg.cc/v1DzbtMy/PREVIEW-1.png" alt="Simple Preview" data-gif="https://i.postimg.cc/RWxhMSBZ/Niveau1.gif" class="complexity-preview">
+            </div>
+            <div class="complexity-button" onclick="selectComplexity(this, 4)">
+              <h3>Intermédiaire</h3>
+              <img src="https://i.postimg.cc/pmsZw1wk/preview-2.png" alt="Intermédiaire Preview" data-gif="https://i.postimg.cc/H8JnLjnV/Niveau2.gif" class="complexity-preview">
+            </div>
+            <div class="complexity-button" onclick="selectComplexity(this, 6)">
+              <h3>Avancé</h3>
+              <img src="https://i.postimg.cc/ZCFjcqjG/preview-3.png" alt="Avancé Preview" data-gif="https://i.postimg.cc/XB6cKM5N/3.gif" class="complexity-preview">
+            </div>
+            <div class="complexity-button" onclick="selectComplexity(this, 8)">
+              <h3>Expert</h3>
+              <img src="https://i.postimg.cc/gxzsBPTn/PREVIEW-4.png" alt="Expert Preview" data-gif="https://i.postimg.cc/jLrZPf66/niveau4.gif" class="complexity-preview">
+            </div>
+          </div>
           <label>
             <input type="range" id="complexity" min="1" max="10" value="1" />
             <span id="complexityValue">1</span>/10
           </label>
+          <div class="buy-me-a-coffee-panel" id="assets-panel">
+            <img src="https://i.postimg.cc/pXT82gnc/Pack-competition.png" alt="Assets Pro">
+            <div class="product-info">
+              <h3>Augmente ta valeur</h3>
+              <p class="product-description">Assets premium, pour pouvoir facturer tes montages plus chers, en gagnant du temps.</p>
+            </div>
+            <button onclick="window.open('https://go.wibeeworks.com/competition', '_blank')">Acheter</button>
+          </div>
           <div class="nav-buttons">
             <button class="prev-button" onclick="prevQuestion('q7', 'q6')">Précédent</button>
             <button class="next-button" onclick="nextQuestion('q7', 'q8')">Suivant</button>
@@ -595,8 +676,8 @@
         <div class="buy-me-a-coffee-panel">
           <img src="https://live.staticflickr.com/65535/54613370848_5928b6ae5a.jpg" alt="Mockups Design">
           <div class="product-info">
-            <h3 style="margin-top: 25px;">Fais partie de la communauté</h3>
-            <p class="product-description" style="margin-top: -10;">Fais partie de la communauté pour des clients, de l’entraide, des ressources et bien plus.</p>
+            <h3 style="margin-top: 10px;">Fais partie de la communauté</h3>
+            <p class="product-description" style="margin-top: 5px;">Fais partie de la communauté pour des clients, de l’entraide, des ressources et bien plus.</p>
           </div>
           <button onclick="window.open('https://urlr.me/5KFAsu', '_blank')">Rejoindre</button>
         </div>
@@ -609,7 +690,8 @@
         <p>Créé par <a href="https://youtube.com/@WibeeWorks" target="_blank">@WibeeWorks</a> |
         <a href="https://shop.wibeeworks.com" target="_blank">Boutique</a> |
         <a href="mailto:wibeecontact@gmail.com">Contact</a> |
-        <a href="https://urlr.me/5KFAsu" target="_blank">Discord</a></p>
+        <a href="https://urlr.me/5KFAsu" target="_blank">Discord</a> |
+        <a href="https://subscribepage.io/EkcjLy" target="_blank">Newsletter</a></p>
       </footer>
     </div>
   </div>
@@ -627,13 +709,11 @@
     const progressBar = document.getElementById('progressBar');
     const totalQuestions = 9;
     let currentQuestion = 0;
-
     function updateProgressBar() {
       currentQuestion++;
       const progress = (currentQuestion / totalQuestions) * 100;
       progressBar.style.width = progress + '%';
     }
-
     function startQuestions() {
       document.getElementById('intro-page').classList.add('hidden');
       document.getElementById('questions').classList.remove('hidden');
@@ -641,20 +721,17 @@
       document.getElementById('progressContainer').classList.remove('hidden');
       updateProgressBar();
     }
-
     function nextQuestion(current, next) {
       if (!validateQuestion(current)) return;
       slideOut(current, next);
       updateProgressBar();
     }
-
     function prevQuestion(current, prev) {
       slideOut(current, prev, true);
       currentQuestion--;
       const progress = ((currentQuestion - 1) / totalQuestions) * 100;
       progressBar.style.width = progress + '%';
     }
-
     function slideOut(current, next, reverse = false) {
       const currentElement = document.getElementById(current);
       const nextElement = document.getElementById(next);
@@ -676,7 +753,6 @@
         }, 10);
       }, 10);
     }
-
     function validateQuestion(current) {
       let isValid = true;
       if (current === 'q1') {
@@ -684,6 +760,9 @@
         const errorElement = document.getElementById('error-q1');
         if (isNaN(rushDuration) || rushDuration <= 1) {
           errorElement.textContent = 'La durée des rushs de base doit être supérieure à 1 minute.';
+          isValid = false;
+        } else if (rushDuration > 6000) {
+          errorElement.textContent = 'La durée des rushs ne peut pas dépasser 6000 minutes.';
           isValid = false;
         } else {
           errorElement.textContent = '';
@@ -707,46 +786,83 @@
         if (isNaN(povCount) || povCount < 1) {
           errorElement.textContent = 'Veuillez entrer un nombre de POV valide.';
           isValid = false;
+        } else if (povCount > 150) {
+          errorElement.textContent = 'Le nombre de POV ne peut pas dépasser 150.';
+          isValid = false;
         } else {
           errorElement.textContent = '';
         }
       }
       return isValid;
     }
-
     function selectOption(button, value) {
       const buttons = button.parentElement.querySelectorAll('button');
       buttons.forEach(btn => btn.classList.remove('selected'));
       button.classList.add('selected');
       document.getElementById(button.parentElement.parentElement.querySelector('input[type="hidden"]').id).value = value;
     }
-
+    function selectComplexity(button, value) {
+      const buttons = document.querySelectorAll('.complexity-button');
+      buttons.forEach(btn => {
+        btn.classList.remove('selected');
+        const img = btn.querySelector('img');
+        if (img) {
+          img.src = img.getAttribute('src').replace(/\.gif$/, '.png');
+        }
+      });
+      button.classList.add('selected');
+      const img = button.querySelector('img');
+      if (img) {
+        img.src = img.getAttribute('data-gif');
+      }
+      const slider = document.getElementById('complexity');
+      slider.value = value;
+      complexityValue.textContent = value;
+    }
     function noDeadline() {
       document.getElementById('deadlineSlider').value = '0';
       document.getElementById('deadlineValue').textContent = '0';
     }
-
     function calculatePrice() {
       const rushDuration = parseFloat(document.getElementById('rushDuration').value || 0);
       const finalDuration = parseFloat(document.getElementById('finalDuration').value || 0);
-      const inQ = parseFloat(document.getElementById('inputQuality').value);
-      const outQ = parseFloat(document.getElementById('outputQuality').value);
+      const inQ = document.getElementById('inputQuality').value;
+      const outQ = document.getElementById('outputQuality').value;
       const povCount = parseFloat(document.getElementById('povCount').value || 1);
       const grading = parseFloat(document.getElementById('colorGrading').value);
       const complexity = parseFloat(document.getElementById('complexity').value);
       const deadline = parseFloat(document.getElementById('deadlineSlider').value);
       const experienceFee = parseFloat(document.getElementById('experienceFee').value || 1);
+      // Calcul des coûts de qualité
+      let qualityMultiplier = 1;
+      if (outQ === '720p') qualityMultiplier = 0.9;
+      if (outQ === '1080p') qualityMultiplier = 1;
+      if (outQ === '1440p') qualityMultiplier = 1.1;
+      if (outQ === '4K') qualityMultiplier = 1.2;
+      let inputQualityMultiplier = 1;
+      if (inQ === '720p') inputQualityMultiplier = 0.9;
+      if (inQ === '1080p') inputQualityMultiplier = 1;
+      if (inQ === '1440p') inputQualityMultiplier = 1.1;
+      if (inQ === '4K') inputQualityMultiplier = 1.2;
+      // Calcul des dimensions en pixels pour chaque qualité
+      const dimensions = {
+        '720p': 1280 * 720,
+        '1080p': 1920 * 1080,
+        '1440p': 2560 * 1440,
+        '4K': 3840 * 2160
+      };
+      // Calcul des coûts de qualité
+      const outputQualityCost = (qualityMultiplier * dimensions[outQ]) / 5000;
+      const inputQualityCost = (inputQualityMultiplier * dimensions[inQ]) / 20000;
       let rushPrice = (rushDuration - finalDuration) * 0.5;
       let complexityCost = finalDuration * complexity;
       let gradingCost = grading * finalDuration * 0.5 * povCount;
       let povCost = (povCount - 1) * rushDuration;
-      let qualityCost = (outQ * finalDuration) / 4000;
-      let inputQualityCost = (inQ * rushDuration) / 18000;
       let deadlineCost = 0;
       if (deadline > 0) {
         deadlineCost = (complexity * (rushDuration / finalDuration)) / deadline * 5;
       }
-      let price = rushPrice + complexityCost + gradingCost + povCost + qualityCost + inputQualityCost + deadlineCost;
+      let price = rushPrice + complexityCost + gradingCost + povCost + outputQualityCost + inputQualityCost + deadlineCost;
       price *= experienceFee;
       const resultBox = document.getElementById('result');
       let resultHTML = `
@@ -761,7 +877,7 @@
           </tr>
           <tr onclick="goToQuestion('q4')">
             <td>Qualité vidéo souhaitée<span class="edit-icon">✏️</span></td>
-            <td>${Math.round(qualityCost)}€</td>
+            <td>${Math.round(outputQualityCost)}€</td>
           </tr>
           <tr onclick="goToQuestion('q3')">
             <td>Qualité des rushs de base<span class="edit-icon">✏️</span></td>
@@ -786,7 +902,6 @@
       document.getElementById('progressContainer').classList.add('hidden');
       createConfetti();
     }
-
     function animatePrice(finalPrice) {
       const priceDisplay = document.getElementById('price-display');
       let currentPrice = 0;
@@ -800,7 +915,6 @@
         priceDisplay.textContent = `${Math.round(currentPrice)}€`;
       }, 20);
     }
-
     function createConfetti() {
       const confettiContainer = document.createElement('div');
       confettiContainer.id = 'confetti-container';
@@ -821,7 +935,6 @@
         confettiContainer.appendChild(confetti);
       }
     }
-
     function goToQuestion(questionId) {
       document.getElementById('conclusion-page').classList.add('hidden');
       document.getElementById('questions').classList.remove('hidden');
@@ -829,8 +942,12 @@
         div.classList.add('hidden');
       });
       document.getElementById(questionId).classList.remove('hidden');
+      if (questionId === 'q7') {
+        document.getElementById('assets-panel').style.display = 'flex';
+      } else {
+        document.getElementById('assets-panel').style.display = 'none';
+      }
     }
-
     function goToIntro() {
       document.getElementById('questions').classList.add('hidden');
       document.getElementById('intro-page').classList.remove('hidden');
@@ -838,65 +955,13 @@
       currentQuestion = 0;
       progressBar.style.width = '0%';
     }
-
     function retryEstimation() {
       window.location.reload();
     }
-
-    function toggleLanguage() {
-      const translateButton = document.querySelector('.translate-button');
-      if (translateButton.textContent === 'FR') {
-        translateButton.textContent = 'EN';
-        translateToEnglish();
-      } else {
-        translateButton.textContent = 'FR';
-        translateToFrench();
-      }
-    }
-
-    function translateToEnglish() {
-      document.querySelector('#intro-page h1').textContent = 'Welcome to the YouTube Video Editing Price Estimator';
-      document.querySelector('#intro-page p').textContent = 'This tool will help you estimate the cost of editing your YouTube videos based on various parameters.';
-      document.querySelector('#intro-page button').textContent = 'Start Estimation';
-      document.querySelector('#q1 .question-title').textContent = 'Raw Footage Duration';
-      document.querySelector('#q1 .question-description').textContent = 'Enter the total duration of your raw footage in minutes.';
-      document.querySelector('#q1 input').placeholder = 'e.g., 60';
-      document.querySelector('#q2 .question-title').textContent = 'Desired Final Duration';
-      document.querySelector('#q2 .question-description').textContent = 'Enter the desired final duration for your video in minutes.';
-      document.querySelector('#q2 input').placeholder = 'e.g., 20';
-      document.querySelector('#q3 .question-title').textContent = 'Base Footage Quality';
-      document.querySelector('#q3 .question-description').textContent = 'Indicate the quality of the base footage you have.';
-      document.querySelector('#q4 .question-title').textContent = 'Desired Video Quality';
-      document.querySelector('#q4 .question-description').textContent = 'Select the desired video quality for your project.';
-      document.querySelector('#q5 .question-title').textContent = 'Number of POVs';
-      document.querySelector('#q5 .question-description').textContent = 'How many different points of view (POVs) do you have in your video?';
-      document.querySelector('#q5 input').placeholder = 'e.g., 3';
-      document.querySelector('#q6 .question-title').textContent = 'Color Grading';
-      document.querySelector('#q6 .question-description').textContent = 'Do you want to include color grading in your video?';
-      document.querySelector('#q7 .question-title').textContent = 'Editing Complexity';
-      document.querySelector('#q7 .question-description').textContent = 'Rate the editing complexity from 1 (simple) to 10 (very complex).';
-      document.querySelector('#q8 .question-title').textContent = 'Deadline for Video Delivery';
-      document.querySelector('#q8 .question-description').textContent = 'Indicate the deadline for delivering the video in days.';
-      document.querySelector('#q9 .question-title').textContent = 'Experience Fees';
-      document.querySelector('#q9 .question-description').textContent = 'Select the level of experience of the editor.';
-      document.querySelector('.estimate-button').textContent = 'Estimate My Price';
-      document.querySelector('#conclusion-page .panel-title').textContent = 'Results';
-      document.querySelector('#conclusion-page .result-description').textContent = 'Here is a detailed estimate of the costs for editing your video.';
-      document.querySelector('.buy-me-a-coffee-panel h3').textContent = 'Join the Community';
-      document.querySelector('.buy-me-a-coffee-panel p').textContent = 'Join the community for clients, mutual aid, resources, and more.';
-      document.querySelector('.buy-me-a-coffee-panel button').textContent = 'Join';
-      document.querySelector('#conclusion-page .nav-buttons button:last-child').textContent = 'Retry';
-    }
-
-    function translateToFrench() {
-      window.location.reload();
-    }
-
     document.getElementById('burgerMenu').addEventListener('click', function() {
       const menu = document.getElementById('menu');
       menu.classList.toggle('open');
     });
-
     document.addEventListener('click', function(event) {
       const menu = document.getElementById('menu');
       const burgerMenu = document.getElementById('burgerMenu');
