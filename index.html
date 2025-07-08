@@ -846,10 +846,10 @@
       if (inQ === '4K') inputQualityMultiplier = 1.2;
       // Calcul des dimensions en pixels pour chaque qualité
       const dimensions = {
-        '720p': 1280 * 720,
-        '1080p': 1920 * 1080,
-        '1440p': 2560 * 1440,
-        '4K': 3840 * 2160
+        '720p': 1280,
+        '1080p': 1920,
+        '1440p': 2560,
+        '4K': 3840
       };
       // Calcul des coûts de qualité
       const outputQualityCost = (qualityMultiplier * dimensions[outQ]) / 5000;
