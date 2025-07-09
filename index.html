@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Estimateur de prix de montage YouTube</title>
-  <link rel="icon" href="https://live.staticflickr.com/65535/54615080596_5b10f12525.jpg" type="image/jpeg">
+  <link rel="icon" href="https://i.postimg.cc/Y05CBgyg/logo.png" type="image/jpeg">
   <style>
     :root {
       --primary-color: #9900CC;
@@ -43,7 +43,7 @@
       border-radius: 10px;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
       position: relative;
-      z-index: 1;
+      z-index: 2;
       width: 100%;
       max-width: 500px;
       text-align: center;
@@ -155,6 +155,7 @@
       bottom: 20px;
       left: 0;
       right: 0;
+      z-index: 1;
     }
     footer a {
       color: hsl(285, 100%, 50%);
@@ -363,7 +364,8 @@
       }
       .container {
         padding: 15px;
-        width: 95%;
+        width: 90%;
+        max-width: 400px;
       }
       .main-title {
         font-size: 20px;
@@ -690,13 +692,11 @@
     const progressBar = document.getElementById('progressBar');
     const totalQuestions = 9;
     let currentQuestion = 0;
-
     function updateProgressBar() {
       currentQuestion++;
       const progress = (currentQuestion / totalQuestions) * 100;
       progressBar.style.width = progress + '%';
     }
-
     function startQuestions() {
       document.getElementById('intro-page').classList.add('hidden');
       document.getElementById('questions').classList.remove('hidden');
@@ -704,20 +704,17 @@
       document.getElementById('progressContainer').classList.remove('hidden');
       updateProgressBar();
     }
-
     function nextQuestion(current, next) {
       if (!validateQuestion(current)) return;
       slideOut(current, next);
       updateProgressBar();
     }
-
     function prevQuestion(current, prev) {
       slideOut(current, prev, true);
       currentQuestion--;
       const progress = ((currentQuestion - 1) / totalQuestions) * 100;
       progressBar.style.width = progress + '%';
     }
-
     function slideOut(current, next, reverse = false) {
       const currentElement = document.getElementById(current);
       const nextElement = document.getElementById(next);
@@ -739,7 +736,6 @@
         }, 10);
       }, 10);
     }
-
     function validateQuestion(current) {
       let isValid = true;
       if (current === 'q1') {
@@ -782,14 +778,12 @@
       }
       return isValid;
     }
-
     function selectOption(button, value) {
       const buttons = button.parentElement.querySelectorAll('button');
       buttons.forEach(btn => btn.classList.remove('selected'));
       button.classList.add('selected');
       document.getElementById(button.parentElement.parentElement.querySelector('input[type="hidden"]').id).value = value;
     }
-
     function selectComplexity(button, value) {
       const buttons = document.querySelectorAll('.complexity-button');
       buttons.forEach(btn => {
@@ -808,12 +802,10 @@
       slider.value = value;
       document.getElementById('complexityValue').textContent = value;
     }
-
     function noDeadline() {
       document.getElementById('deadlineSlider').value = '0';
       document.getElementById('deadlineValue').textContent = '0';
     }
-
     function calculatePrice() {
       const rushDuration = parseFloat(document.getElementById('rushDuration').value || 0);
       const finalDuration = parseFloat(document.getElementById('finalDuration').value || 0);
@@ -824,42 +816,34 @@
       const complexity = parseFloat(document.getElementById('complexity').value);
       const deadline = parseFloat(document.getElementById('deadlineSlider').value);
       const experienceFee = parseFloat(document.getElementById('experienceFee').value || 1);
-
       let qualityMultiplier = 1;
       if (outQ === '720p') qualityMultiplier = 0.9;
       if (outQ === '1080p') qualityMultiplier = 1;
       if (outQ === '1440p') qualityMultiplier = 1.1;
       if (outQ === '4K') qualityMultiplier = 1.2;
-
       let inputQualityMultiplier = 1;
       if (inQ === '720p') inputQualityMultiplier = 0.9;
       if (inQ === '1080p') inputQualityMultiplier = 1;
       if (inQ === '1440p') inputQualityMultiplier = 1.1;
       if (inQ === '4K') inputQualityMultiplier = 1.2;
-
       const dimensions = {
         '720p': 1280,
         '1080p': 1920,
         '1440p': 2560,
         '4K': 3840
       };
-
       const outputQualityCost = (qualityMultiplier * dimensions[outQ]) / 500;
       const inputQualityCost = (inputQualityMultiplier * dimensions[inQ]) / 500;
-
       let rushPrice = (rushDuration - finalDuration) * 0.5;
       let complexityCost = finalDuration * complexity;
       let gradingCost = grading * finalDuration * 0.5 * povCount;
       let povCost = (povCount - 1) * rushDuration;
       let deadlineCost = 0;
-
       if (deadline > 0) {
         deadlineCost = (complexity * (rushDuration / finalDuration)) / deadline * 5;
       }
-
       let price = rushPrice + complexityCost + gradingCost + povCost + outputQualityCost + inputQualityCost + deadlineCost;
       price *= experienceFee;
-
       const resultBox = document.getElementById('result');
       let resultHTML = `
         <table>
@@ -898,7 +882,6 @@
       document.getElementById('progressContainer').classList.add('hidden');
       createConfetti();
     }
-
     function animatePrice(finalPrice) {
       const priceDisplay = document.getElementById('price-display');
       let currentPrice = 0;
@@ -912,7 +895,6 @@
         priceDisplay.textContent = `${Math.round(currentPrice)}€`;
       }, 20);
     }
-
     function createConfetti() {
       const confettiContainer = document.createElement('div');
       confettiContainer.id = 'confetti-container';
@@ -933,7 +915,6 @@
         confettiContainer.appendChild(confetti);
       }
     }
-
     function goToQuestion(questionId) {
       document.getElementById('conclusion-page').classList.add('hidden');
       document.getElementById('questions').classList.remove('hidden');
@@ -947,7 +928,6 @@
         document.getElementById('assets-panel').style.display = 'none';
       }
     }
-
     function goToIntro() {
       document.getElementById('questions').classList.add('hidden');
       document.getElementById('intro-page').classList.remove('hidden');
@@ -955,16 +935,13 @@
       currentQuestion = 0;
       progressBar.style.width = '0%';
     }
-
     function retryEstimation() {
       window.location.reload();
     }
-
     document.getElementById('burgerMenu').addEventListener('click', function() {
       const menu = document.getElementById('menu');
       menu.classList.toggle('open');
     });
-
     document.addEventListener('click', function(event) {
       const menu = document.getElementById('menu');
       const burgerMenu = document.getElementById('burgerMenu');
