@@ -398,17 +398,7 @@
         margin-bottom: 10px;
       }
       .buy-me-a-coffee-panel {
-        flex-direction: column;
-        text-align: center;
-        height: auto;
-      }
-      .buy-me-a-coffee-panel img {
-        margin-right: 0;
-        margin-bottom: 10px;
-      }
-      .buy-me-a-coffee-panel button {
-        display: block;
-        margin: 10px auto 0;
+        display: none !important;
       }
       .complexity-button {
         flex: 1 1 calc(50% - 10px);
@@ -589,19 +579,19 @@
           <div class="complexity-buttons">
             <div class="complexity-button" onclick="selectComplexity(this, 2)">
               <h3>Simple</h3>
-              <img src="https://i.postimg.cc/v1DzbtMy/PREVIEW-1.png" alt="Simple Preview" data-gif="https://i.postimg.cc/RWxhMSBZ/Niveau1.gif" class="complexity-preview">
+              <img src="https://i.postimg.cc/v1DzbtMy/PREVIEW-1.png" alt="Simple Preview">
             </div>
             <div class="complexity-button" onclick="selectComplexity(this, 4)">
               <h3>Intermédiaire</h3>
-              <img src="https://i.postimg.cc/pmsZw1wk/preview-2.png" alt="Intermédiaire Preview" data-gif="https://i.postimg.cc/H8JnLjnV/Niveau2.gif" class="complexity-preview">
+              <img src="https://i.postimg.cc/pmsZw1wk/preview-2.png" alt="Intermédiaire Preview">
             </div>
             <div class="complexity-button" onclick="selectComplexity(this, 6)">
               <h3>Avancé</h3>
-              <img src="https://i.postimg.cc/ZCFjcqjG/preview-3.png" alt="Avancé Preview" data-gif="https://i.postimg.cc/XB6cKM5N/3.gif" class="complexity-preview">
+              <img src="https://i.postimg.cc/ZCFjcqjG/preview-3.png" alt="Avancé Preview">
             </div>
             <div class="complexity-button" onclick="selectComplexity(this, 8)">
               <h3>Expert</h3>
-              <img src="https://i.postimg.cc/gxzsBPTn/PREVIEW-4.png" alt="Expert Preview" data-gif="https://i.postimg.cc/jLrZPf66/niveau4.gif" class="complexity-preview">
+              <img src="https://i.postimg.cc/gxzsBPTn/PREVIEW-4.png" alt="Expert Preview">
             </div>
           </div>
           <label>
@@ -692,11 +682,13 @@
     const progressBar = document.getElementById('progressBar');
     const totalQuestions = 9;
     let currentQuestion = 0;
+
     function updateProgressBar() {
       currentQuestion++;
       const progress = (currentQuestion / totalQuestions) * 100;
       progressBar.style.width = progress + '%';
     }
+
     function startQuestions() {
       document.getElementById('intro-page').classList.add('hidden');
       document.getElementById('questions').classList.remove('hidden');
@@ -704,17 +696,20 @@
       document.getElementById('progressContainer').classList.remove('hidden');
       updateProgressBar();
     }
+
     function nextQuestion(current, next) {
       if (!validateQuestion(current)) return;
       slideOut(current, next);
       updateProgressBar();
     }
+
     function prevQuestion(current, prev) {
       slideOut(current, prev, true);
       currentQuestion--;
       const progress = ((currentQuestion - 1) / totalQuestions) * 100;
       progressBar.style.width = progress + '%';
     }
+
     function slideOut(current, next, reverse = false) {
       const currentElement = document.getElementById(current);
       const nextElement = document.getElementById(next);
@@ -736,6 +731,7 @@
         }, 10);
       }, 10);
     }
+
     function validateQuestion(current) {
       let isValid = true;
       if (current === 'q1') {
@@ -778,34 +774,28 @@
       }
       return isValid;
     }
+
     function selectOption(button, value) {
       const buttons = button.parentElement.querySelectorAll('button');
       buttons.forEach(btn => btn.classList.remove('selected'));
       button.classList.add('selected');
       document.getElementById(button.parentElement.parentElement.querySelector('input[type="hidden"]').id).value = value;
     }
+
     function selectComplexity(button, value) {
       const buttons = document.querySelectorAll('.complexity-button');
-      buttons.forEach(btn => {
-        btn.classList.remove('selected');
-        const img = btn.querySelector('img');
-        if (img) {
-          img.src = img.getAttribute('src').replace(/\.gif$/, '.png');
-        }
-      });
+      buttons.forEach(btn => btn.classList.remove('selected'));
       button.classList.add('selected');
-      const img = button.querySelector('img');
-      if (img) {
-        img.src = img.getAttribute('data-gif');
-      }
       const slider = document.getElementById('complexity');
       slider.value = value;
       document.getElementById('complexityValue').textContent = value;
     }
+
     function noDeadline() {
       document.getElementById('deadlineSlider').value = '0';
       document.getElementById('deadlineValue').textContent = '0';
     }
+
     function calculatePrice() {
       const rushDuration = parseFloat(document.getElementById('rushDuration').value || 0);
       const finalDuration = parseFloat(document.getElementById('finalDuration').value || 0);
@@ -816,35 +806,44 @@
       const complexity = parseFloat(document.getElementById('complexity').value);
       const deadline = parseFloat(document.getElementById('deadlineSlider').value);
       const experienceFee = parseFloat(document.getElementById('experienceFee').value || 1);
+
       let qualityMultiplier = 1;
       if (outQ === '720p') qualityMultiplier = 0.9;
       if (outQ === '1080p') qualityMultiplier = 1;
       if (outQ === '1440p') qualityMultiplier = 1.1;
       if (outQ === '4K') qualityMultiplier = 1.2;
+
       let inputQualityMultiplier = 1;
       if (inQ === '720p') inputQualityMultiplier = 0.9;
       if (inQ === '1080p') inputQualityMultiplier = 1;
       if (inQ === '1440p') inputQualityMultiplier = 1.1;
       if (inQ === '4K') inputQualityMultiplier = 1.2;
+
       const dimensions = {
         '720p': 1280,
         '1080p': 1920,
         '1440p': 2560,
         '4K': 3840
       };
+
       const outputQualityCost = (qualityMultiplier * dimensions[outQ]) / 500;
       const inputQualityCost = (inputQualityMultiplier * dimensions[inQ]) / 500;
+
       let rushPrice = (rushDuration - finalDuration) * 0.5;
       let complexityCost = finalDuration * complexity;
       let gradingCost = grading * finalDuration * 0.5 * povCount;
       let povCost = (povCount - 1) * rushDuration;
       let deadlineCost = 0;
+
       if (deadline > 0) {
         deadlineCost = (complexity * (rushDuration / finalDuration)) / deadline * 5;
       }
+
       let price = rushPrice + complexityCost + gradingCost + povCost + outputQualityCost + inputQualityCost + deadlineCost;
       price *= experienceFee;
+
       const resultBox = document.getElementById('result');
+
       let resultHTML = `
         <table>
           <tr onclick="goToQuestion('q1')">
@@ -874,6 +873,7 @@
         </table>
         <p>Prix estimé :</p>
       `;
+
       resultBox.innerHTML = resultHTML;
       resultBox.classList.add("visible");
       animatePrice(Math.round(price));
@@ -882,6 +882,7 @@
       document.getElementById('progressContainer').classList.add('hidden');
       createConfetti();
     }
+
     function animatePrice(finalPrice) {
       const priceDisplay = document.getElementById('price-display');
       let currentPrice = 0;
@@ -895,6 +896,7 @@
         priceDisplay.textContent = `${Math.round(currentPrice)}€`;
       }, 20);
     }
+
     function createConfetti() {
       const confettiContainer = document.createElement('div');
       confettiContainer.id = 'confetti-container';
@@ -906,6 +908,7 @@
       confettiContainer.style.pointerEvents = 'none';
       confettiContainer.style.zIndex = '1000';
       document.body.appendChild(confettiContainer);
+
       for (let i = 0; i < 100; i++) {
         const confetti = document.createElement('div');
         confetti.classList.add('confetti');
@@ -915,6 +918,7 @@
         confettiContainer.appendChild(confetti);
       }
     }
+
     function goToQuestion(questionId) {
       document.getElementById('conclusion-page').classList.add('hidden');
       document.getElementById('questions').classList.remove('hidden');
@@ -928,6 +932,7 @@
         document.getElementById('assets-panel').style.display = 'none';
       }
     }
+
     function goToIntro() {
       document.getElementById('questions').classList.add('hidden');
       document.getElementById('intro-page').classList.remove('hidden');
@@ -935,13 +940,16 @@
       currentQuestion = 0;
       progressBar.style.width = '0%';
     }
+
     function retryEstimation() {
       window.location.reload();
     }
+
     document.getElementById('burgerMenu').addEventListener('click', function() {
       const menu = document.getElementById('menu');
       menu.classList.toggle('open');
     });
+
     document.addEventListener('click', function(event) {
       const menu = document.getElementById('menu');
       const burgerMenu = document.getElementById('burgerMenu');
