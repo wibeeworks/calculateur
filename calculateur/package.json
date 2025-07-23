@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@vercel/analytics": "^1.5.0",
+    "next-sitemap": "^4.2.3"
+  },
+  "scripts": {
+    "build": "next build",
+    "postbuild": "next-sitemap"
+  }
+}

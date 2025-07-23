@@ -1,0 +1,37 @@
+{
+  "name": "projet-web-premium",
+  "version": "1.0.0",
+  "description": "Application web premium pour l'estimation des coûts de montage vidéo avec fonctionnalités avancées.",
+  "main": "public/scripts/main.js",
+  "scripts": {
+    "start": "webpack serve --mode development",
+    "build": "webpack --mode production",
+    "test": "jest"
+  },
+  "keywords": [
+    "web",
+    "premium",
+    "video",
+    "estimation",
+    "firebase",
+    "stripe"
+  ],
+  "author": "Votre Nom",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "firebase": "^9.6.1",
+    "stripe": "^8.0.0",
+    "xlsx": "^0.17.0"
+  },
+  "devDependencies": {
+    "webpack": "^5.64.0",
+    "webpack-cli": "^4.9.1",
+    "babel-loader": "^8.2.3",
+    "jest": "^27.0.6",
+    "css-loader": "^6.5.1",
+    "style-loader": "^3.3.1",
+    "babel-preset-react": "^7.14.5"
+  }
+}

@@ -1,0 +1,6 @@
+# Ne pas versionner les dépendances
+node_modules/
+calculateur/node_modules/
+
+node_modules/
+calculateur/node_modules/

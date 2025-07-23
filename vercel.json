@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "calculateur/index.html", "use": "@vercel/static" },
+    { "src": "miniatures/index.html",  "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/calculateur(?:/(.*))?", "dest": "/calculateur/$1" },
+    { "src": "/miniatures(?:/(.*))?",  "dest": "/miniatures/$1" }
+  ]
+}
