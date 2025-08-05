@@ -793,7 +793,7 @@
         </section>
     </div>
     <script>
-        const API_KEY = 'AIzaSyDVY-tHj6ByRLb9WwieolIIdXupjOtAOkE'; // Remplacez par votre clé API YouTube
+        const API_KEY = process.env.YT_API_KEY;
         let config = {
             style: 'computer',
             displayChannel: false,
@@ -899,24 +899,23 @@
         }
 
         async function fetchVideoData(videoId) {
-            const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&id=${videoId}&key=${API_KEY}`);
-            const videoData = await response.json();
-            const video = videoData.items[0];
-
-            const channelResponse = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=snippet&id=${video.snippet.channelId}&key=${API_KEY}`);
-            const channelData = await channelResponse.json();
-            const channel = channelData.items[0];
-
-            return {
-                thumbnail: video.snippet.thumbnails.maxres?.url || video.snippet.thumbnails.high.url,
-                channelLogo: channel.snippet.thumbnails.default.url,
-                title: video.snippet.title,
-                channel: channel.snippet.title,
-                views: formatViews(video.statistics.viewCount),
-                time: new Date(video.snippet.publishedAt).toLocaleDateString(),
-                duration: formatDuration(video.contentDetails.duration)
-            };
+        const resp = await fetch(`/api/fetchVideo?videoId=${videoId}`);
+        if (!resp.ok) {
+            throw new Error('Erreur lors de la récupération des données YouTube');
         }
+        const { video, channel } = await resp.json();
+
+        return {
+            thumbnail: video.snippet.thumbnails.maxres?.url || video.snippet.thumbnails.high.url,
+            channelLogo: channel.snippet.thumbnails.default.url,
+            title: video.snippet.title,
+            channel: channel.snippet.title,
+            views: formatViews(video.statistics.viewCount),
+            time: new Date(video.snippet.publishedAt).toLocaleDateString(),
+            duration: formatDuration(video.contentDetails.duration)
+        };
+        }
+
 
         function formatViews(views) {
             if (views >= 1000000) {

@@ -1,0 +1,2 @@
+STRIPE_SECRET_KEY=sk_test_...  nWgwgjso875XjM3hXttJGZ78XFSYe7icXZfXvadXG1GG0K5OfwNIBwbRu3DKzZTiy00LjkRPhxe
+STRIPE_WEBHOOK_SECRET=whsec_... https://europe-west3-wibee-apps.cloudfunctions.net/handleWebhookEvents
