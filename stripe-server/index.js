@@ -14,7 +14,13 @@ admin.initializeApp({
 const app = express();
 
 // ✅ CORS complet ici
-app.use(cors()); // Autorise toutes les origines pour les tests
+app.use(cors({
+  origin: [
+    'https://super-duper-space-palm-tree-q7x6w6r6rvvwh47q7-3000.app.github.dev',
+    'https://apps.wibeeworks.com'
+  ]
+}));
+
 
 app.options('*', cors()); // Supporte les requêtes pré-vol (OPTIONS)
 
