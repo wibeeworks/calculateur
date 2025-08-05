@@ -4,9 +4,12 @@ const admin = require('firebase-admin');
 const { resolve } = require('path');
 require('dotenv').config({ path: './.env' });
 
+const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT);
+
 admin.initializeApp({
-  credential: admin.credential.cert(require('./serviceAccountKey.json'))
+  credential: admin.credential.cert(serviceAccount)
 });
+
 
 const app = express();
 
