@@ -51,7 +51,8 @@ app.get('/checkout-session', async (req, res) => {
 });
 
 app.post('/create-checkout-session', async (req, res) => {
-  const userId = req.body.userId; // L'ID ou l'email du client (envoyé depuis ton front)
+  const userId = req.body.userId;
+
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
     line_items: [{
@@ -62,13 +63,15 @@ app.post('/create-checkout-session', async (req, res) => {
       },
       quantity: 1,
     }],
-    client_reference_id: userId, // <- ici
-    success_url: `${baseUrl}/success.html?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${baseUrl}/canceled.html`
+    client_reference_id: userId,
+    success_url: 'https://calculateur-mrod.onrender.com/success.html',
+    cancel_url: 'https://calculateur-mrod.onrender.com/canceled.html',
   });
 
+  // ✅ C'est cette ligne qui redirige vers Stripe (NE PAS CHANGER)
   res.redirect(303, session.url);
 });
+
 
 app.post('/webhook', async (req, res) => {
   let event;
