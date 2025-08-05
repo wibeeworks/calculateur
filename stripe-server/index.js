@@ -18,7 +18,7 @@ app.use(cors()); // Autorise toutes les origines pour les tests
 
 app.options('*', cors()); // Supporte les requêtes pré-vol (OPTIONS)
 
-const baseUrl = `https://57f6d731-de41-4ce5-9e4c-96a8b6bac25c-00-1izttfyif8hcm.worf.replit.dev`; // 🔥 NE PAS inclure le :3000
+const baseUrl = `https://calculateur-mrod.onrender.com/`; // 🔥 NE PAS inclure le :3000
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, {
   apiVersion: '2020-08-27'
